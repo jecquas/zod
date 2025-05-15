@@ -501,15 +501,38 @@ type MySchema = z.infer<typeof mySchema>;
 // Zod 4: still `unknown`
 ```
 
+### drops `ctx.path`
+
+Zod's new parsing architecture does not eagerly evaluate the `path` array. This was a necessary change that unlocks Zod 4's dramatic performance improvements.
+
+```ts
+z.string().superRefine((val, ctx) => {
+  ctx.path; // ❌ no longer available
+});
+```
+
+### drops function as second argument
+
+The following horrifying overload has been removed. 
+
+```ts
+const longString = z.string().refine(
+  (val) => val.length > 10,
+  (val) => ({ message: `${val} is not more than 10 characters` })
+);
+```
+
 ## `z.ostring()`, etc dropped
 
 The undocumented convenience methods `z.ostring()`, `z.onumber()`, etc. have been removed. These were shorthand methods for defining optional string schemas.
 
-## `z.literal()` drops `symbol` support
+## `z.literal()` 
+
+### drops `symbol` support
 
 Symbols aren't considered literal values, nor can they be simply compared with `===`. This was an oversight in Zod 3.
 
-## `.create()` factories dropped
+## static `.create()` factories dropped
 
 Previously all Zod classes defined a static `.create()` method. These are now implemented as standalone factory functions.
 

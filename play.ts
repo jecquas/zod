@@ -1,5 +1,5 @@
-import { z } from "zod/v4";
+import * as z from "zod/v4";
 
-z;
+// z.string().check(z.startsWith("asdf", "bad")).parse("qwer");
 
-console.log(z.toJSONSchema(z.never()));
+console.log(z.string().includes("Error")._zod.def);
